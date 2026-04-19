@@ -1,39 +1,33 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.UnitTests\\BlindMatchPAS.UnitTests.csproj": {}
+    "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.UnitTests\\BlindMatchPAS.UnitTests.csproj": {
+    "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.UnitTests\\BlindMatchPAS.UnitTests.csproj",
+        "projectUniqueName": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj",
         "projectName": "BlindMatchPAS.UnitTests",
-        "projectPath": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.UnitTests\\BlindMatchPAS.UnitTests.csproj",
-        "packagesPath": "C:\\Users\\trave\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.UnitTests\\obj\\",
+        "projectPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj",
+        "packagesPath": "/Users/ravindufernando/.nuget/packages/",
+        "outputPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\trave\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/ravindufernando/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj": {
-                "projectPath": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj"
+              "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj": {
+                "projectPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj"
               }
             }
           }
@@ -48,7 +42,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -95,32 +89,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj": {
+    "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj",
+        "projectUniqueName": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
         "projectName": "BlindMatchPAS.Web",
-        "projectPath": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj",
-        "packagesPath": "C:\\Users\\trave\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\obj\\",
+        "projectPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
+        "packagesPath": "/Users/ravindufernando/.nuget/packages/",
+        "outputPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\trave\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/ravindufernando/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -139,7 +127,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -193,7 +181,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

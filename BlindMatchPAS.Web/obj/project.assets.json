@@ -4834,31 +4834,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\trave\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/Users/ravindufernando/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj",
+      "projectUniqueName": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
       "projectName": "BlindMatchPAS.Web",
-      "projectPath": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj",
-      "packagesPath": "C:\\Users\\trave\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\obj\\",
+      "projectPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
+      "packagesPath": "/Users/ravindufernando/.nuget/packages/",
+      "outputPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\trave\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/ravindufernando/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4877,7 +4870,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "10.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -4931,8 +4924,16 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.202/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+    }
+  ]
 }
