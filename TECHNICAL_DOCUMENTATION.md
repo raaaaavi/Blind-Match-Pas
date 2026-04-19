@@ -1,49 +1,61 @@
 # BlindMatchPAS Technical Documentation
 
-## Overview
+## Quick Start
 
-BlindMatchPAS is an ASP.NET Core 8 MVC application that supports academic project proposal submission, blind supervisor review, and controlled match confirmation. It is built as a layered solution with a web application project, unit tests, integration tests, and supporting documentation.
+1. Open `BlindMatchPAS.sln` in Visual Studio or your preferred IDE.
+2. Update the SQL Server connection string in:
+   - `BlindMatchPAS.Web/appsettings.json`
+   - `BlindMatchPAS.Web/appsettings.Development.json`
+3. Run EF Core migrations.
+4. Start the `BlindMatchPAS.Web` application.
+5. Log in using one of the seeded demo accounts.
 
-## Repository Structure
+> This document is designed to help you set up, run, and understand the repository without changing the code.
 
-- `BlindMatchPAS.sln` - Visual Studio solution file.
-- `BlindMatchPAS.Web/` - Main ASP.NET Core MVC application.
-- `BlindMatchPAS.UnitTests/` - Unit tests for service and business rule layers.
-- `BlindMatchPAS.IntegrationTests/` - Integration tests for data and route protection.
-- `docs/` - Additional coursework notes and guidance.
+## What is BlindMatchPAS?
 
-### Main application folders
+BlindMatchPAS is an ASP.NET Core 8 MVC web app for academic project approvals. It lets students submit proposals, supervisors browse proposals anonymously, and admins monitor the approval process.
 
-- `Controllers/` - MVC controllers for web routes and endpoints.
-- `Data/` - Entity Framework Core database context, migrations, and seed logic.
-- `Models/` - Domain entities, enums, and shared view models.
-- `Repositories/` - Data access interfaces and implementations.
-- `Services/` - Business logic and application workflow implementations.
-- `Utilities/` - Helper extensions used across the application.
-- `ViewModels/` - Data transfer objects for views and forms.
-- `Views/` - Razor views for the UI.
+## What is included in the repository?
+
+- `BlindMatchPAS.sln` - solution file.
+- `BlindMatchPAS.Web/` - main web application.
+- `BlindMatchPAS.UnitTests/` - unit tests.
+- `BlindMatchPAS.IntegrationTests/` - integration tests.
+- `docs/` - supporting documentation.
+
+### Main folders in `BlindMatchPAS.Web`
+
+- `Controllers/` - handles web requests and routes.
+- `Data/` - EF Core database context, migrations, and seeding.
+- `Models/` - domain entities, enums, and view models.
+- `Repositories/` - data access logic.
+- `Services/` - application business rules.
+- `Utilities/` - helper extensions.
+- `ViewModels/` - data structures for views.
+- `Views/` - Razor pages and UI templates.
 
 ## Prerequisites
 
-- .NET SDK 8.x
-- Visual Studio 2022 or newer (recommended) or another compatible IDE
-- SQL Server, SQL Server Express, or LocalDB
-- Optional: `dotnet-ef` CLI tool for running migrations
+- .NET SDK 8.x installed.
+- Visual Studio 2022 or newer, or another C# IDE.
+- SQL Server, SQL Server Express, or LocalDB.
+- Optional: `dotnet-ef` CLI tool.
 
-## Setup Instructions
+## Setup steps
 
-### 1. Open the solution
+### 1. Open the project
 
-Open `BlindMatchPAS.sln` in Visual Studio or your preferred C# IDE.
+Open `BlindMatchPAS.sln` in Visual Studio or your IDE.
 
 ### 2. Configure the database
 
-Update the connection string in:
+Edit the connection string in both:
 
 - `BlindMatchPAS.Web/appsettings.json`
 - `BlindMatchPAS.Web/appsettings.Development.json`
 
-Example:
+Use a connection string like this:
 
 ```json
 "ConnectionStrings": {
@@ -51,46 +63,56 @@ Example:
 }
 ```
 
-Change the server, database, username, and password values for your environment.
+Update the server name, database name, username, and password to match your environment.
 
 ### 3. Apply database migrations
 
-The project includes EF Core migrations in `BlindMatchPAS.Web/Data/Migrations`.
+This project includes EF Core migrations in `BlindMatchPAS.Web/Data/Migrations`.
 
-Run from Visual Studio Package Manager Console:
+Choose one option:
+
+- Visual Studio Package Manager Console:
 
 ```powershell
 Update-Database -Project BlindMatchPAS.Web -StartupProject BlindMatchPAS.Web
 ```
 
-Or run from the .NET CLI:
+- .NET CLI:
 
 ```bash
 dotnet ef database update --project BlindMatchPAS.Web --startup-project BlindMatchPAS.Web
 ```
 
-### 4. Seed data
+### 4. Seed data automatically
 
-Seed data runs automatically on application startup outside the `Testing` environment after migrations are applied. Seeded content includes research areas, demo user accounts, and sample proposals.
+Seed data runs when the app starts in non-testing environments after migrations complete. You do not need to run a separate command.
 
-## Running the application
+Seeded data includes:
 
-### From Visual Studio
+- research areas
+- demo student, supervisor, module leader, and admin accounts
+- sample proposals
+
+## Run the application
+
+### Option A: Visual Studio
 
 1. Set `BlindMatchPAS.Web` as the startup project.
 2. Build the solution.
 3. Run the application.
-4. Log in with a seeded account.
+4. Log in with a demo account.
 
-### From the CLI
+### Option B: CLI
 
 ```bash
 dotnet run --project BlindMatchPAS.Web
 ```
 
-## Default login accounts
+## Demo login accounts
 
-All seeded demo accounts use the password: `P@ssword123!`
+All seeded demo accounts use the password:
+
+`P@ssword123!`
 
 - System Admin: `admin@blindmatchpas.local`
 - Module Leader: `moduleleader@blindmatchpas.local`
@@ -101,62 +123,65 @@ All seeded demo accounts use the password: `P@ssword123!`
 - Student 2: `student.group2@blindmatchpas.local`
 - Student 3: `student.group3@blindmatchpas.local`
 
-## User roles and flows
+## Who uses this app?
 
 ### Student
 
-- Submit, edit, and withdraw project proposals.
-- Track proposal status and match progress.
-- View confirmed supervisor details only after match completion.
+- Submit or edit proposals.
+- Withdraw proposals.
+- Track proposal status.
+- See supervisor details only after a confirmed match.
 
 ### Supervisor
 
-- Browse anonymous proposals by research area.
-- Express interest in proposals without seeing student identity.
-- Confirm matches and review assigned proposals.
+- Browse anonymous proposals.
+- Express interest in proposals.
+- Confirm matched proposals.
 
 ### Admin
 
-- Manage user accounts, research areas, and system settings.
-- View audit logs and oversight dashboards.
-- Reassign proposals and monitor matching status.
+- Manage users and research areas.
+- Review audit logs.
+- Reassign proposals.
+- Monitor system status.
 
-## Running tests
+## Run tests
 
-Run the full solution tests:
+### Run all tests
 
 ```bash
 dotnet test BlindMatchPAS.sln
 ```
 
-Run unit tests only:
+### Run unit tests only
 
 ```bash
 dotnet test BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj
 ```
 
-Run integration tests only:
+### Run integration tests only
 
 ```bash
 dotnet test BlindMatchPAS.IntegrationTests/BlindMatchPAS.IntegrationTests.csproj
 ```
 
-## Development notes
+## Notes for developers
 
-- The application uses ASP.NET Core Identity for authentication and role-based authorization.
-- Business logic resides in `Services/` and uses repository patterns from `Repositories/`.
-- Database models and relationships are defined in `Models/DomainEntities.cs`.
-- Views are implemented with Razor and Bootstrap.
-- Audit logging is captured for important operations to support traceability.
+- Authentication and roles are provided by ASP.NET Core Identity.
+- Business logic is implemented in `Services/`.
+- Data access uses repository patterns in `Repositories/`.
+- Entities are defined in `Models/DomainEntities.cs`.
+- Views are Razor templates styled with Bootstrap.
+- Important actions are recorded in audit logs.
 
-## Additional resources
+## Helpful resources
 
-- `ARCHITECTURE_AND_USER_GUIDE.md` - architecture overview and user guide.
-- `DEVELOPMENT_NOTES.md` - development-specific implementation notes.
-- `docs/SAMPLE_REPORT_SUPPORT_NOTES.md` - report reference notes.
-- `docs/SUGGESTED_SCREENSHOTS.md` - suggested screenshot guide.
-- `docs/SUGGESTED_COMMIT_PLAN.md` - commit planning advice.
+- `ARCHITECTURE_AND_USER_GUIDE.md` - architecture overview.
+- `DEVELOPMENT_NOTES.md` - development-specific details.
+- `docs/SAMPLE_REPORT_SUPPORT_NOTES.md` - report guidance.
+- `docs/SUGGESTED_SCREENSHOTS.md` - screenshot suggestions.
+- `docs/SUGGESTED_COMMIT_PLAN.md` - commit planning.
 
 ## Summary
 
-This repository is ready to run after configuring the database connection and applying migrations. The main entry point is `BlindMatchPAS.Web`, and testing can be executed through the provided test projects.
+To get started, configure your database, run migrations, and launch `BlindMatchPAS.Web`. The app is ready to use once your connection string is set and the database is created.
