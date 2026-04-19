@@ -27,7 +27,7 @@ public class ProposalService(
         var proposals = await proposalRepository.GetStudentProposalsAsync(studentUserId);
         return proposals.Select(MapListItem).ToList();
     }
-
+//bug fix admin service 
     public async Task<ProposalFormViewModel> BuildProposalFormAsync(string studentUserId, int? proposalId = null)
     {
         var areas = await researchAreaRepository.GetActiveAsync();
@@ -65,7 +65,7 @@ public class ProposalService(
         {
             return ServiceResult<int>.Fail("Please select an active research area.");
         }
-
+//proposal service
         var proposal = new Proposal
         {
             Title = model.Title.Trim(),

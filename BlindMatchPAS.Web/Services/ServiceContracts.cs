@@ -1,5 +1,5 @@
 namespace BlindMatchPAS.Web.Services.Interfaces;
-
+//service contracts
 public interface IProposalService
 {
     Task<StudentDashboardViewModel> GetStudentDashboardAsync(string studentUserId);

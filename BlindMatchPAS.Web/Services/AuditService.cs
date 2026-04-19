@@ -5,6 +5,7 @@ namespace BlindMatchPAS.Web.Services;
 
 public class AuditService(IAuditLogRepository auditLogRepository) : IAuditService
 {
+    //bug fix audit log 
     public async Task RecordAsync(string action, string entityName, string entityId, string? userId, string details)
     {
         await auditLogRepository.AddAsync(new AuditLog
