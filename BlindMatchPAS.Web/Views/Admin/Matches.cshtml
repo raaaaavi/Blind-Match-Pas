@@ -1,0 +1,42 @@
+@model MatchOversightViewModel
+@{
+    ViewData["Title"] = "Match Oversight";
+}
+
+<div class="surface-card">
+    <span class="eyebrow">Allocation Governance</span>
+    <h2>Current confirmed allocations</h2>
+    <div class="table-responsive mt-3">
+        <table class="table table-dark-table align-middle">
+            <thead>
+                <tr>
+                    <th>Proposal</th>
+                    <th>Student</th>
+                    <th>Supervisor</th>
+                    <th>Confirmed</th>
+                    <th>Mode</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var match in Model.Matches)
+                {
+                    <tr>
+                        <td>@match.ProposalTitle</td>
+                        <td>@match.StudentName</td>
+                        <td>@match.SupervisorName</td>
+                        <td>@match.ConfirmedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
+                        <td>
+                            <span class="status-badge @(match.CreatedByAdminOverride ? "badge-soft-warning" : "badge-soft-success")">
+                                @(match.CreatedByAdminOverride ? "Admin Override" : "Standard")
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="ReassignProposal" asp-route-proposalId="@match.ProposalId" class="btn btn-soft btn-sm">Reassign</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

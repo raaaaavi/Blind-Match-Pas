@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "How It Works";
+}
+
+<section class="surface-card">
+    <span class="eyebrow">Blind Workflow</span>
+    <h2 class="mb-3">How Blind-Match PAS protects fairness and traceability</h2>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="step-card active">
+                <strong>Student Proposal Submission</strong>
+                <p>Students submit title, abstract, technical stack, methodology, and research area with secure ownership controls.</p>
+            </div>
+            <div class="step-card">
+                <strong>Anonymous Supervisor Review</strong>
+                <p>Supervisors browse projects without names, student IDs, emails, or group identity before a confirmed match.</p>
+            </div>
+            <div class="step-card">
+                <strong>Interest and Confirmation</strong>
+                <p>Supervisors express interest first. The system reveals identities only after a valid confirmation or admin override.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="surface-card h-100 bg-transparent border border-white border-opacity-10">
+                <h3>Security Highlights</h3>
+                <ul class="list-unstyled mt-3 mb-0 d-grid gap-3">
+                    <li><i class="bi bi-check2-circle text-success me-2"></i> ASP.NET Core Identity with role-based authorization</li>
+                    <li><i class="bi bi-check2-circle text-success me-2"></i> Anti-forgery protection on sensitive POST actions</li>
+                    <li><i class="bi bi-check2-circle text-success me-2"></i> Hidden student identity before confirmed match</li>
+                    <li><i class="bi bi-check2-circle text-success me-2"></i> Audit logs for proposals, interests, matches, and overrides</li>
+                    <li><i class="bi bi-check2-circle text-success me-2"></i> Admin oversight for manual reassignment edge cases</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

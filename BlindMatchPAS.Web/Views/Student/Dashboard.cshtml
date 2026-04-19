@@ -1,0 +1,58 @@
+@model StudentDashboardViewModel
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<div class="stats-grid">
+    <div class="metric-card"><span>@Model.TotalProposals</span><small>Total proposals</small></div>
+    <div class="metric-card"><span>@Model.PendingCount</span><small>Pending / under review</small></div>
+    <div class="metric-card"><span>@Model.MatchedCount</span><small>Matched</small></div>
+    <div class="metric-card"><span>@Model.DraftCount</span><small>Draft</small></div>
+</div>
+
+<div class="surface-card mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <span class="eyebrow">Recent Activity</span>
+            <h2 class="mb-0">My latest proposals</h2>
+        </div>
+        <a asp-action="CreateProposal" class="btn btn-primary">Submit New Proposal</a>
+    </div>
+
+    @if (Model.RecentProposals.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-dark-table align-middle">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Area</th>
+                        <th>Status</th>
+                        <th>Updated</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var proposal in Model.RecentProposals)
+                    {
+                        <tr>
+                            <td>@proposal.Title</td>
+                            <td>@proposal.ResearchArea</td>
+                            <td><partial name="_StatusBadge" model="proposal.Status" /></td>
+                            <td>@proposal.UpdatedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
+                            <td class="text-end"><a asp-action="Details" asp-route-id="@proposal.Id" class="btn btn-soft btn-sm">View</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <i class="bi bi-folder2-open"></i>
+            <h3>No proposals yet</h3>
+            <p>Start by creating your first project proposal for supervisor review.</p>
+        </div>
+    }
+</div>

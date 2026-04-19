@@ -1,0 +1,59 @@
+@model List<ProposalListItemViewModel>
+@{
+    ViewData["Title"] = "My Proposals";
+}
+
+<div class="surface-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <span class="eyebrow">Proposal Portfolio</span>
+            <h2 class="mb-0">Submitted and draft proposals</h2>
+        </div>
+        <a asp-action="CreateProposal" class="btn btn-primary">New Proposal</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-dark-table align-middle">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Research Area</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th>Updated</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var proposal in Model)
+                    {
+                        <tr>
+                            <td>@proposal.Title</td>
+                            <td>@proposal.ResearchArea</td>
+                            <td><partial name="_StatusBadge" model="proposal.Status" /></td>
+                            <td>@(proposal.SubmittedAt?.ToLocalTime().ToString("dd MMM yyyy") ?? "-")</td>
+                            <td>@proposal.UpdatedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
+                            <td class="text-end d-flex justify-content-end gap-2">
+                                <a asp-action="Details" asp-route-id="@proposal.Id" class="btn btn-soft btn-sm">View</a>
+                                @if (proposal.CanEdit)
+                                {
+                                    <a asp-action="EditProposal" asp-route-id="@proposal.Id" class="btn btn-outline-light btn-sm">Edit</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <i class="bi bi-file-earmark-plus"></i>
+            <h3>No proposals available</h3>
+            <p>Create your first project proposal to start the review lifecycle.</p>
+        </div>
+    }
+</div>

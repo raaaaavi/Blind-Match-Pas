@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Blind-Match PAS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="auth-shell">
+    <main class="auth-page">
+        <section class="auth-visual">
+            <div class="auth-brand">
+                <div class="brand-mark">
+                    <span class="brand-orb"></span>
+                    <div>
+                        <strong>Blind-Match PAS</strong>
+                        <small>Secure academic project allocation</small>
+                    </div>
+                </div>
+                <h1>Blind review first. Identity reveal only after a valid match.</h1>
+                <p>Designed for final-year project allocation with secure RBAC, anonymous supervision interest, and oversight-ready dashboards.</p>
+                <ul class="auth-feature-list">
+                    <li><i class="bi bi-shield-lock"></i> Blind student identity protection</li>
+                    <li><i class="bi bi-diagram-3"></i> Structured lifecycle and audit trail</li>
+                    <li><i class="bi bi-grid-1x2"></i> Premium dashboard UI for viva demos</li>
+                </ul>
+            </div>
+        </section>
+        <section class="auth-panel">
+            <div class="auth-card">
+                @RenderBody()
+            </div>
+        </section>
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

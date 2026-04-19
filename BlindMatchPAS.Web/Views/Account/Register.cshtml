@@ -1,0 +1,70 @@
+@model RegisterViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Register";
+}
+
+<div class="mb-4">
+    <span class="eyebrow">Student Registration</span>
+    <h2>Create a project submission account</h2>
+    <p class="text-secondary">Use this flow for student or group-lead registration. Supervisor and admin accounts are managed through the admin panel.</p>
+</div>
+
+<form asp-action="Register" method="post" class="d-grid gap-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+    <div>
+        <label asp-for="DisplayName" class="form-label"></label>
+        <input asp-for="DisplayName" class="form-control" />
+        <span asp-validation-for="DisplayName" class="text-danger small"></span>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="RegistrationNumber" class="form-label"></label>
+            <input asp-for="RegistrationNumber" class="form-control" />
+            <span asp-validation-for="RegistrationNumber" class="text-danger small"></span>
+        </div>
+    </div>
+    <div>
+        <label asp-for="Programme" class="form-label"></label>
+        <input asp-for="Programme" class="form-control" />
+        <span asp-validation-for="Programme" class="text-danger small"></span>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="GroupName" class="form-label"></label>
+            <input asp-for="GroupName" class="form-control" />
+            <span asp-validation-for="GroupName" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="TeamMemberNames" class="form-label"></label>
+            <input asp-for="TeamMemberNames" class="form-control" />
+            <span asp-validation-for="TeamMemberNames" class="text-danger small"></span>
+        </div>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="ConfirmPassword" class="form-label"></label>
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
+</form>
+
+<div class="auth-footer-note">
+    Already registered? <a asp-action="Login">Sign in here</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

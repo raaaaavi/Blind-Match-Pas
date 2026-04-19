@@ -1,0 +1,40 @@
+@model LoginViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Login";
+}
+
+<div class="mb-4">
+    <span class="eyebrow">Sign In</span>
+    <h2>Access your role-based dashboard</h2>
+    <p class="text-secondary">Students, supervisors, module leaders, and system administrators use the same secure sign-in flow.</p>
+</div>
+
+<form asp-action="Login" method="post" class="d-grid gap-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+    <div>
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control form-control-lg" placeholder="name@pusl.local" />
+        <span asp-validation-for="Email" class="text-danger small"></span>
+    </div>
+    <div>
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" class="form-control form-control-lg" placeholder="Enter password" />
+        <span asp-validation-for="Password" class="text-danger small"></span>
+    </div>
+    <div class="form-check">
+        <input asp-for="RememberMe" class="form-check-input" />
+        <label asp-for="RememberMe" class="form-check-label"></label>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg">Login</button>
+</form>
+
+<div class="auth-footer-note">
+    New student group lead? <a asp-action="Register">Create an account</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

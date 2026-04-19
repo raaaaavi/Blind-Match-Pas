@@ -1,0 +1,11 @@
+@{
+    var message = TempData["StatusMessage"] as string;
+    var type = TempData["StatusType"] as string ?? "info";
+}
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-@type shadow-sm border-0">
+        @message
+    </div>
+}

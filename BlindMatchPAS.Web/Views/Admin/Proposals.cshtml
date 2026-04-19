@@ -1,0 +1,68 @@
+@model ProposalOversightViewModel
+@{
+    ViewData["Title"] = "Proposal Oversight";
+}
+
+<div class="surface-card mb-4">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label">Search</label>
+            <input name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Title or student name" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Research area</label>
+            <select name="researchAreaId" class="form-select">
+                <option value="">All areas</option>
+                @foreach (var area in Model.ResearchAreas)
+                {
+                    <option value="@area.Id" selected="@(Model.ResearchAreaId == area.Id)">@area.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select" asp-items="Html.GetEnumSelectList<ProposalStatus>()">
+                <option value="">All</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+</div>
+
+<div class="surface-card">
+    <span class="eyebrow">Oversight Table</span>
+    <h2>All proposals and matching status</h2>
+    <div class="table-responsive mt-3">
+        <table class="table table-dark-table align-middle">
+            <thead>
+                <tr>
+                    <th>Proposal</th>
+                    <th>Student</th>
+                    <th>Area</th>
+                    <th>Status</th>
+                    <th>Interests</th>
+                    <th>Matched Supervisor</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var proposal in Model.Proposals)
+                {
+                    <tr>
+                        <td>@proposal.Title</td>
+                        <td>@proposal.StudentName</td>
+                        <td>@proposal.ResearchArea</td>
+                        <td><partial name="_StatusBadge" model="proposal.Status" /></td>
+                        <td>@proposal.InterestCount</td>
+                        <td>@(proposal.MatchedSupervisor ?? "-")</td>
+                        <td class="text-end">
+                            <a asp-action="ReassignProposal" asp-route-proposalId="@proposal.ProposalId" class="btn btn-soft btn-sm">Assign / Reassign</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
