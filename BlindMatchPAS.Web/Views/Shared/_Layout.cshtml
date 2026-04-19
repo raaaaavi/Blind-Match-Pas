@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Blind-Match PAS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="app-shell @(User.Identity?.IsAuthenticated == true ? "authenticated-shell" : "public-shell")">
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="dashboard-shell">
+            <aside class="app-sidebar" id="appSidebar">
+                <div>
+                    <a asp-controller="Home" asp-action="Index" class="brand-mark">
+                        <span class="brand-orb"></span>
+                        <div>
+                            <strong>Blind-Match PAS</strong>
+                            <small>Project Approval System</small>
+                        </div>
+                    </a>
+
+                    <nav class="nav flex-column sidebar-nav mt-4">
+                        @if (User.IsInRole(RoleNames.Student))
+                        {
+                            <a class="nav-link" asp-controller="Student" asp-action="Dashboard"><i class="bi bi-grid"></i> Student Dashboard</a>
+                            <a class="nav-link" asp-controller="Student" asp-action="Proposals"><i class="bi bi-folder2-open"></i> My Proposals</a>
+                            <a class="nav-link" asp-controller="Student" asp-action="CreateProposal"><i class="bi bi-plus-circle"></i> Submit Proposal</a>
+                        }
+                        @if (User.IsInRole(RoleNames.Supervisor))
+                        {
+                            <a class="nav-link" asp-controller="Supervisor" asp-action="Dashboard"><i class="bi bi-grid"></i> Supervisor Dashboard</a>
+                            <a class="nav-link" asp-controller="Supervisor" asp-action="Browse"><i class="bi bi-incognito"></i> Blind Review</a>
+                            <a class="nav-link" asp-controller="Supervisor" asp-action="Interested"><i class="bi bi-stars"></i> Interested</a>
+                            <a class="nav-link" asp-controller="Supervisor" asp-action="Matches"><i class="bi bi-link-45deg"></i> Matches</a>
+                            <a class="nav-link" asp-controller="Supervisor" asp-action="Expertise"><i class="bi bi-diagram-3"></i> Expertise</a>
+                        }
+                        @if (User.IsInRole(RoleNames.ModuleLeader) || User.IsInRole(RoleNames.SystemAdmin))
+                        {
+                            <a class="nav-link" asp-controller="Admin" asp-action="Dashboard"><i class="bi bi-speedometer2"></i> Admin Dashboard</a>
+                            <a class="nav-link" asp-controller="Admin" asp-action="Users"><i class="bi bi-people"></i> User Management</a>
+                            <a class="nav-link" asp-controller="Admin" asp-action="ResearchAreas"><i class="bi bi-diagram-2"></i> Research Areas</a>
+                            <a class="nav-link" asp-controller="Admin" asp-action="Proposals"><i class="bi bi-kanban"></i> Proposal Oversight</a>
+                            <a class="nav-link" asp-controller="Admin" asp-action="Matches"><i class="bi bi-shuffle"></i> Match Oversight</a>
+                            <a class="nav-link" asp-controller="Admin" asp-action="AuditLogs"><i class="bi bi-journal-text"></i> Audit Logs</a>
+                        }
+                    </nav>
+                </div>
+                <div class="sidebar-footnote">
+                    Blind identities are protected until a valid match is confirmed.
+                </div>
+            </aside>
+
+            <div class="dashboard-main">
+                <header class="topbar">
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="btn btn-soft d-lg-none" type="button" data-sidebar-toggle>
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <div>
+                            <div class="eyebrow">PUSL2020 Coursework</div>
+                            <h1 class="page-title">@ViewData["Title"]</h1>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="role-chip">
+                            @if (User.IsInRole(RoleNames.SystemAdmin))
+                            {
+                                <text>System Admin</text>
+                            }
+                            else if (User.IsInRole(RoleNames.ModuleLeader))
+                            {
+                                <text>Module Leader</text>
+                            }
+                            else if (User.IsInRole(RoleNames.Supervisor))
+                            {
+                                <text>Supervisor</text>
+                            }
+                            else
+                            {
+                                <text>Student</text>
+                            }
+                        </span>
+                        <form asp-controller="Account" asp-action="Logout" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                        </form>
+                    </div>
+                </header>
+
+                <main class="content-wrapper">
+                    <partial name="_AlertMessage" />
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    }
+    else
+    {
+        <header class="public-header">
+            <div class="container d-flex justify-content-between align-items-center py-3">
+                <a asp-controller="Home" asp-action="Index" class="brand-mark">
+                    <span class="brand-orb"></span>
+                    <div>
+                        <strong>Blind-Match PAS</strong>
+                        <small>Academic Project Approval</small>
+                    </div>
+                </a>
+                <div class="d-flex gap-2">
+                    <a asp-controller="Home" asp-action="About" class="btn btn-soft">How It Works</a>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light">Register</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="container py-4">
+            <partial name="_AlertMessage" />
+            @RenderBody()
+        </main>
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

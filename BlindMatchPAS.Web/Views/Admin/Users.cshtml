@@ -1,0 +1,88 @@
+@model UserManagementViewModel
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="surface-card">
+            <span class="eyebrow">Account Provisioning</span>
+            <h2>Create user account</h2>
+            <form asp-action="CreateUser" method="post" class="d-grid gap-3 mt-3">
+                @Html.AntiForgeryToken()
+                <div>
+                    <label asp-for="NewUser.DisplayName" class="form-label"></label>
+                    <input asp-for="NewUser.DisplayName" class="form-control" />
+                </div>
+                <div>
+                    <label asp-for="NewUser.Email" class="form-label"></label>
+                    <input asp-for="NewUser.Email" class="form-control" />
+                </div>
+                <div>
+                    <label asp-for="NewUser.Role" class="form-label"></label>
+                    <select asp-for="NewUser.Role" class="form-select" asp-items="new SelectList(RoleNames.All)"></select>
+                </div>
+                <div>
+                    <label asp-for="NewUser.RegistrationNumber" class="form-label"></label>
+                    <input asp-for="NewUser.RegistrationNumber" class="form-control" />
+                </div>
+                <div>
+                    <label asp-for="NewUser.Password" class="form-label"></label>
+                    <input asp-for="NewUser.Password" class="form-control" />
+                </div>
+                <div>
+                    <label asp-for="NewUser.DepartmentOrProgramme" class="form-label"></label>
+                    <input asp-for="NewUser.DepartmentOrProgramme" class="form-control" />
+                </div>
+                <div>
+                    <label asp-for="NewUser.GroupOrSpecialization" class="form-label"></label>
+                    <input asp-for="NewUser.GroupOrSpecialization" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-primary">Create User</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="surface-card">
+            <span class="eyebrow">Directory</span>
+            <h2>Current accounts</h2>
+            <div class="table-responsive mt-3">
+                <table class="table table-dark-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@user.DisplayName</strong>
+                                    <div class="text-secondary small">@user.ExtraInfo</div>
+                                </td>
+                                <td>@user.Role</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    <span class="status-badge @(user.IsActive ? "badge-soft-success" : "badge-soft-danger")">
+                                        @(user.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <form asp-action="ToggleUser" asp-route-id="@user.Id" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-soft btn-sm">Toggle</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

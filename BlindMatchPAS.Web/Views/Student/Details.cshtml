@@ -1,0 +1,90 @@
+@model ProposalDetailsViewModel
+@{
+    ViewData["Title"] = "Proposal Details";
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="surface-card">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <span class="eyebrow">@Model.ResearchArea</span>
+                    <h2>@Model.Title</h2>
+                </div>
+                <partial name="_StatusBadge" model="Model.Status" />
+            </div>
+
+            <div class="content-pairs">
+                <div>
+                    <h4>Abstract</h4>
+                    <p>@Model.Abstract</p>
+                </div>
+                <div>
+                    <h4>Technical Stack</h4>
+                    <p>@Model.TechnicalStack</p>
+                </div>
+                <div>
+                    <h4>Methodology</h4>
+                    <p>@Model.Methodology</p>
+                </div>
+                <div>
+                    <h4>Keywords</h4>
+                    <div class="tag-row">
+                        @foreach (var keyword in Model.Keywords)
+                        {
+                            <span class="tag-pill">@keyword</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                @if (Model.CanEdit)
+                {
+                    <a asp-action="EditProposal" asp-route-id="@Model.Id" class="btn btn-primary">Edit Proposal</a>
+                }
+                @if (Model.CanWithdraw)
+                {
+                    <form asp-action="Withdraw" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger" data-confirm="Withdraw this proposal?">Withdraw</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="surface-card mb-4">
+            <span class="eyebrow">Match Result</span>
+            <h3>Supervisor Reveal</h3>
+            @if (!string.IsNullOrWhiteSpace(Model.SupervisorName))
+            {
+                <p><strong>@Model.SupervisorName</strong></p>
+                <p class="mb-1">@Model.SupervisorEmail</p>
+                <p class="mb-1">@Model.SupervisorDepartment</p>
+                <p class="text-secondary mb-0">@Model.SupervisorSpecialization</p>
+            }
+            else
+            {
+                <div class="empty-state compact">
+                    <i class="bi bi-eye-slash"></i>
+                    <p>Supervisor identity stays hidden until a confirmed match is recorded.</p>
+                </div>
+            }
+        </div>
+        <div class="surface-card">
+            <span class="eyebrow">Timeline</span>
+            <h3>Proposal lifecycle</h3>
+            <div class="timeline">
+                @foreach (var item in Model.Timeline)
+                {
+                    <div class="timeline-item">
+                        <strong>@item.Status</strong>
+                        <p>@item.Note</p>
+                        <small>@item.ChangedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</small>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

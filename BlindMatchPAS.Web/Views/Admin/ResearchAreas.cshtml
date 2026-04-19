@@ -1,0 +1,61 @@
+@model ResearchAreaManagementViewModel
+@{
+    ViewData["Title"] = "Research Area Management";
+}
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="surface-card">
+            <span class="eyebrow">New Area</span>
+            <h2>Add or update research themes</h2>
+            <form asp-action="SaveResearchArea" method="post" class="d-grid gap-3 mt-3">
+                @Html.AntiForgeryToken()
+                <input asp-for="NewResearchArea.Id" type="hidden" />
+                <div>
+                    <label asp-for="NewResearchArea.Name" class="form-label"></label>
+                    <input asp-for="NewResearchArea.Name" class="form-control" />
+                </div>
+                <div>
+                    <label asp-for="NewResearchArea.Description" class="form-label"></label>
+                    <textarea asp-for="NewResearchArea.Description" class="form-control" rows="4"></textarea>
+                </div>
+                <div>
+                    <label asp-for="NewResearchArea.AccentColor" class="form-label"></label>
+                    <input asp-for="NewResearchArea.AccentColor" class="form-control form-control-color" />
+                </div>
+                <div class="form-check">
+                    <input asp-for="NewResearchArea.IsActive" class="form-check-input" />
+                    <label asp-for="NewResearchArea.IsActive" class="form-check-label"></label>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Area</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="surface-card">
+            <span class="eyebrow">Available Areas</span>
+            <h2>Manage active research categories</h2>
+            <div class="row g-3 mt-1">
+                @foreach (var area in Model.ResearchAreas)
+                {
+                    <div class="col-md-6">
+                        <div class="research-chip-card">
+                            <span class="research-accent" style="background:@area.AccentColor"></span>
+                            <div class="flex-grow-1">
+                                <strong>@area.Name</strong>
+                                <p>@area.Description</p>
+                                <span class="status-badge @(area.IsActive ? "badge-soft-success" : "badge-soft-danger")">
+                                    @(area.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </div>
+                            <form asp-action="ToggleResearchArea" asp-route-id="@area.Id" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-soft btn-sm">Toggle</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+global using System.ComponentModel.DataAnnotations;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using BlindMatchPAS.Web.Authorization;
+global using BlindMatchPAS.Web.Models.Entities;
+global using BlindMatchPAS.Web.Models.Enums;
+global using BlindMatchPAS.Web.Models.Shared;
+global using BlindMatchPAS.Web.ViewModels.Account;
+global using BlindMatchPAS.Web.ViewModels.Admin;
+global using BlindMatchPAS.Web.ViewModels.Home;
+global using BlindMatchPAS.Web.ViewModels.Shared;
+global using BlindMatchPAS.Web.ViewModels.Student;
+global using BlindMatchPAS.Web.ViewModels.Supervisor;

@@ -1,0 +1,34 @@
+@model List<AuditLogViewModel>
+@{
+    ViewData["Title"] = "Audit Logs";
+}
+
+<div class="surface-card">
+    <span class="eyebrow">Traceability</span>
+    <h2>Key system events</h2>
+    <div class="table-responsive mt-3">
+        <table class="table table-dark-table align-middle">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Action</th>
+                    <th>Entity</th>
+                    <th>User</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td>@log.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</td>
+                        <td>@log.Action</td>
+                        <td>@log.EntityName #@log.EntityId</td>
+                        <td>@log.UserName</td>
+                        <td>@log.Details</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

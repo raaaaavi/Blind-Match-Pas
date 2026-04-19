@@ -1,0 +1,34 @@
+@model AdminReassignmentViewModel
+@{
+    ViewData["Title"] = "Manual Reassignment";
+}
+
+<div class="surface-card">
+    <span class="eyebrow">Admin Intervention</span>
+    <h2>@Model.ProposalTitle</h2>
+    <p class="text-secondary">Use this action to assign or reassign a supervisor in approved edge cases. The action is recorded in the audit trail.</p>
+
+    <form asp-action="SubmitReassignment" method="post" class="d-grid gap-3 mt-4">
+        @Html.AntiForgeryToken()
+        <input asp-for="ProposalId" type="hidden" />
+        <input asp-for="ProposalTitle" type="hidden" />
+        <div>
+            <label asp-for="SupervisorId" class="form-label"></label>
+            <select asp-for="SupervisorId" asp-items="Model.Supervisors" class="form-select"></select>
+            <span asp-validation-for="SupervisorId" class="text-danger small"></span>
+        </div>
+        <div>
+            <label asp-for="Reason" class="form-label"></label>
+            <textarea asp-for="Reason" rows="4" class="form-control" placeholder="Explain the reason for manual assignment or reassignment"></textarea>
+            <span asp-validation-for="Reason" class="text-danger small"></span>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Apply Assignment</button>
+            <a asp-action="Matches" class="btn btn-soft">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

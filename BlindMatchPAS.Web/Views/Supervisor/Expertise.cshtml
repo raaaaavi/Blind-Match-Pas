@@ -1,0 +1,29 @@
+@model ExpertiseManagementViewModel
+@{
+    ViewData["Title"] = "Expertise Management";
+}
+
+<div class="surface-card">
+    <span class="eyebrow">Research Preferences</span>
+    <h2>Manage expertise alignment</h2>
+    <p class="text-secondary">Your selected areas help prioritize suitable proposals during blind review.</p>
+
+    <form method="post" class="d-grid gap-3">
+        @Html.AntiForgeryToken()
+        <div class="row g-3">
+            @for (var i = 0; i < Model.ResearchAreas.Count; i++)
+            {
+                var area = Model.ResearchAreas[i];
+                <div class="col-md-6">
+                    <label class="selection-tile">
+                        <input type="checkbox" name="SelectedResearchAreaIds" value="@area.Value" checked="@Model.SelectedResearchAreaIds.Contains(int.Parse(area.Value!))" />
+                        <span>@area.Text</span>
+                    </label>
+                </div>
+            }
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save Expertise</button>
+        </div>
+    </form>
+</div>

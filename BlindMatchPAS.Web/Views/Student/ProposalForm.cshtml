@@ -1,0 +1,70 @@
+@model ProposalFormViewModel
+@{
+    ViewData["Title"] = Model.Id.HasValue ? "Edit Proposal" : "Submit Proposal";
+}
+
+<div class="surface-card">
+    <span class="eyebrow">Proposal Workflow</span>
+    <h2>@ViewData["Title"]</h2>
+    <p class="text-secondary">Build a strong final-year project submission with clear academic structure and technical direction.</p>
+
+    <div class="proposal-progress mb-4">
+        <div class="active">Proposal Details</div>
+        <div class="active">Technical Scope</div>
+        <div class="active">Review Readiness</div>
+    </div>
+
+    <form method="post" class="d-grid gap-3">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+        <div>
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control form-control-lg" />
+            <span asp-validation-for="Title" class="text-danger small"></span>
+        </div>
+        <div>
+            <label asp-for="Abstract" class="form-label"></label>
+            <textarea asp-for="Abstract" rows="5" class="form-control"></textarea>
+            <span asp-validation-for="Abstract" class="text-danger small"></span>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="TechnicalStack" class="form-label"></label>
+                <textarea asp-for="TechnicalStack" rows="4" class="form-control"></textarea>
+                <span asp-validation-for="TechnicalStack" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Methodology" class="form-label"></label>
+                <textarea asp-for="Methodology" rows="4" class="form-control"></textarea>
+                <span asp-validation-for="Methodology" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="ResearchAreaId" class="form-label"></label>
+                <select asp-for="ResearchAreaId" asp-items="Model.ResearchAreas" class="form-select">
+                    <option value="">Select research area</option>
+                </select>
+                <span asp-validation-for="ResearchAreaId" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="TeamSize" class="form-label"></label>
+                <input asp-for="TeamSize" class="form-control" />
+                <span asp-validation-for="TeamSize" class="text-danger small"></span>
+            </div>
+        </div>
+        <div>
+            <label asp-for="Keywords" class="form-label"></label>
+            <input asp-for="Keywords" class="form-control" placeholder="e.g. AI, privacy, analytics" />
+            <span asp-validation-for="Keywords" class="text-danger small"></span>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save Proposal</button>
+            <a asp-action="Proposals" class="btn btn-soft">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

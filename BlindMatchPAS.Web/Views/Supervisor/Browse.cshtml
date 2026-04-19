@@ -1,0 +1,67 @@
+@model AnonymousProposalBrowserViewModel
+@{
+    ViewData["Title"] = "Blind Review Browser";
+}
+
+<div class="surface-card mb-4">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-5">
+            <label class="form-label">Search proposals</label>
+            <input name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search by title, abstract, or stack" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Research area</label>
+            <select name="researchAreaId" class="form-select">
+                <option value="">All research areas</option>
+                @foreach (var area in Model.ResearchAreas)
+                {
+                    <option value="@area.Id" selected="@(Model.ResearchAreaId == area.Id)">@area.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+        </div>
+    </form>
+</div>
+
+<div class="row g-3">
+    @if (Model.Proposals.Any())
+    {
+        @foreach (var proposal in Model.Proposals)
+        {
+            <div class="col-lg-6">
+                <div class="surface-card h-100">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                        <div>
+                            <span class="eyebrow">@proposal.ResearchArea</span>
+                            <h3>@proposal.Title</h3>
+                        </div>
+                        <partial name="_StatusBadge" model="proposal.Status" />
+                    </div>
+                    <p class="text-secondary">@proposal.Abstract</p>
+                    <div class="tag-row">
+                        @foreach (var keyword in proposal.Keywords)
+                        {
+                            <span class="tag-pill">@keyword</span>
+                        }
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <small class="text-secondary">Submitted @(proposal.SubmittedAt?.ToLocalTime().ToString("dd MMM yyyy") ?? "N/A")</small>
+                        <a asp-action="Details" asp-route-id="@proposal.Id" class="btn btn-soft">Review</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="bi bi-search"></i>
+                <h3>No proposals matched the current filter</h3>
+                <p>Try broadening the search or selecting another research area.</p>
+            </div>
+        </div>
+    }
+</div>

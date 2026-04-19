@@ -1,0 +1,66 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DA930E73-B948-4290-B93D-6C10F42099B4}|BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj|c:\\users\\trave\\onedrive\\desktop\\blind-match-pas\\blindmatchpas.web\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DA930E73-B948-4290-B93D-6C10F42099B4}|BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj|solutionrelative:blindmatchpas.web\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DA930E73-B948-4290-B93D-6C10F42099B4}|BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj|c:\\users\\trave\\onedrive\\desktop\\blind-match-pas\\blindmatchpas.web\\blindmatchpas.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{DA930E73-B948-4290-B93D-6C10F42099B4}|BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj|solutionrelative:blindmatchpas.web\\blindmatchpas.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{74946827-37a0-11d2-a273-00c04f8ef4ff}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "BlindMatchPAS.Web\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\appsettings.Development.json",
+              "RelativeToolTip": "BlindMatchPAS.Web\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-04-19T06:54:54.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BlindMatchPAS.Web",
+              "DocumentMoniker": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj",
+              "RelativeDocumentMoniker": "BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj",
+              "ToolTip": "C:\\Users\\trave\\OneDrive\\Desktop\\Blind-Match-Pas\\BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj",
+              "RelativeToolTip": "BlindMatchPAS.Web\\BlindMatchPAS.Web.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-04-19T06:53:37.837Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var maxAreaCount = Math.Max(1, Model.ProposalsByArea.DefaultIfEmpty(new AreaAnalyticsViewModel { Count = 1 }).Max(x => x?.Count ?? 1));
+}
+
+<div class="stats-grid">
+    <div class="metric-card"><span>@Model.TotalStudents</span><small>Total students</small></div>
+    <div class="metric-card"><span>@Model.TotalSupervisors</span><small>Total supervisors</small></div>
+    <div class="metric-card"><span>@Model.TotalProposals</span><small>Total proposals</small></div>
+    <div class="metric-card"><span>@Model.TotalMatchedProjects</span><small>Matched projects</small></div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-lg-7">
+        <div class="surface-card h-100">
+            <span class="eyebrow">Analytics Widget</span>
+            <h2>Proposals by research area</h2>
+            <div class="chart-widget mt-4">
+                @foreach (var area in Model.ProposalsByArea)
+                {
+                    <div class="chart-row">
+                        <span>@area.AreaName</span>
+                        <div class="chart-bar-wrap">
+                            <div class="chart-bar" style="width:@(area.Count * 100 / maxAreaCount)%"></div>
+                        </div>
+                        <strong>@area.Count</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="surface-card h-100">
+            <span class="eyebrow">Audit Pulse</span>
+            <h2>Recent key events</h2>
+            <div class="timeline mt-3">
+                @foreach (var item in Model.RecentAuditLogs)
+                {
+                    <div class="timeline-item">
+                        <strong>@item.Action</strong>
+                        <p>@item.Details</p>
+                        <small>@item.UserName · @item.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</small>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+@model LandingPageViewModel
+@{
+    ViewData["Title"] = "Blind-Match PAS";
+}
+
+<section class="hero-panel">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="eyebrow">PUSL2020 Software Development Tools and Practices</span>
+            <h1 class="hero-title">Secure blind matching for final-year project approval.</h1>
+            <p class="hero-copy">Blind-Match PAS supports anonymous supervisor review, clean role-based workflows, academic oversight, and polished dashboard experiences for project submissions and allocations.</p>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg">Login to Dashboard</a>
+                <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light btn-lg">Create Student Account</a>
+            </div>
+            <div class="stats-row mt-4">
+                <div class="metric-card compact"><span>@Model.StudentCount</span><small>Students</small></div>
+                <div class="metric-card compact"><span>@Model.SupervisorCount</span><small>Supervisors</small></div>
+                <div class="metric-card compact"><span>@Model.ProposalCount</span><small>Proposals</small></div>
+                <div class="metric-card compact"><span>@Model.MatchCount</span><small>Matches</small></div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="glass-card h-100">
+                <div class="step-card active">
+                    <strong>1. Student Submission</strong>
+                    <p>Students submit project ideas with methodology, stack, and research area details.</p>
+                </div>
+                <div class="step-card">
+                    <strong>2. Blind Supervisor Review</strong>
+                    <p>Supervisors browse proposals without student identity and express informed interest.</p>
+                </div>
+                <div class="step-card">
+                    <strong>3. Secure Match Reveal</strong>
+                    <p>Identity is revealed only after a valid confirmed match or an admin override.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mt-5">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Why It Works</span>
+            <h2>Designed for fairness, traceability, and strong coursework presentation.</h2>
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="surface-card h-100">
+                <i class="bi bi-incognito feature-icon"></i>
+                <h3>Anonymous by Default</h3>
+                <p>Student identity is hidden from supervisors during review, protecting the blind-matching principle.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="surface-card h-100">
+                <i class="bi bi-shield-lock feature-icon"></i>
+                <h3>Role-Secured Workflow</h3>
+                <p>Identity, dashboards, and actions are protected through ASP.NET Core Identity and RBAC.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="surface-card h-100">
+                <i class="bi bi-bar-chart feature-icon"></i>
+                <h3>Analytics and Oversight</h3>
+                <p>Admins can monitor allocations, research area activity, and audit logs for intervention-ready governance.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mt-5">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Research Areas</span>
+            <h2>Sample academic themes available in the seeded environment.</h2>
+        </div>
+    </div>
+    <div class="row g-3">
+        @foreach (var area in Model.ResearchAreas)
+        {
+            <div class="col-md-4">
+                <div class="research-chip-card">
+                    <span class="research-accent" style="background:@area.AccentColor"></span>
+                    <div>
+                        <strong>@area.Name</strong>
+                        <p>Available for project submissions and supervisor expertise matching.</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
