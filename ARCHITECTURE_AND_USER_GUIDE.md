@@ -62,32 +62,192 @@ BlindMatchPAS.sln
 
 ### High-Level Component Diagram
 
+The application follows a classic **layered architecture pattern** with clear separation of concerns:
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     Browser / User                           │
+│   (Student, Supervisor, Admin roles via MVC views)          │
 └────────────────────┬────────────────────────────────────────┘
+                     │ HTTP Request
                      │
 ┌────────────────────▼────────────────────────────────────────┐
-│              ASP.NET Core MVC (Controllers)                  │
-│  StudentController, SupervisorController, AdminController   │
+│       *** PRESENTATION LAYER ***                            │
+│         ASP.NET Core MVC (Controllers)                      │
+│  • StudentController      — Handles /student/* routes       │
+│  • SupervisorController   — Handles /supervisor/* routes    │
+│  • AdminController        — Handles /admin/* routes         │
+│  • AccountController      — Login/Registration              │
+│                                                              │
+│  Role:                                                       │
+│  - Route HTTP requests to appropriate service calls         │
+│  - Extract user identity (via User.GetUserId())             │
+│  - Validate anti-forgery tokens on POST/PUT/DELETE          │
+│  - Check authorization attributes (@Authorize, roles)       │
+│  - Return appropriate view or status code                   │
 └────────────────────┬────────────────────────────────────────┘
+                     │ Controller calls Service methods
                      │
 ┌────────────────────▼────────────────────────────────────────┐
-│              Services Layer (Business Logic)                │
-│  ProposalService, MatchingService, AdminService,            │
-│  AuditService                                               │
+│       *** BUSINESS LOGIC LAYER ***                          │
+│         Services (Interfaces in ServiceContracts)           │
+│  • ProposalService                                          │
+│    └─ Create/Edit/Withdraw proposals                        │
+│    └─ Validate proposal state transitions                   │
+│    └─ Build view models for students                        │
+│                                                              │
+│  • MatchingService                                          │
+│    └─ Browse proposals anonymously                          │
+│    └─ Express interest (with duplicate prevention)          │
+│    └─ Confirm matches (reveals identity)                    │
+│    └─ Manage supervisor expertise                           │
+│                                                              │
+│  • AdminService                                             │
+│    └─ User and research area management                    │
+│    └─ Proposal and match oversight                          │
+│    └─ Manual reassignment workflows                         │
+│    └─ System statistics & dashboards                        │
+│                                                              │
+│  • AuditService                                             │
+│    └─ Log all business-critical actions                     │
+│    └─ Record action, entity, user, timestamp, details       │
+│                                                              │
+│  Role:                                                       │
+│  - Enforce business rules (e.g., no editing matched         │
+│    proposals, prevent duplicate interest)                   │
+│  - Orchestrate workflow logic (proposal lifecycle)          │
+│  - Call repositories for data access                        │
+│  - Call audit service for logging                           │
+│  - Return ServiceResult<T> (success/error with messages)    │
+│  - Build domain-specific view models                        │
 └────────────────────┬────────────────────────────────────────┘
+                     │ Service calls Repository methods
                      │
 ┌────────────────────▼────────────────────────────────────────┐
-│           Repository Layer (Data Abstraction)               │
-│  ProposalRepository, ResearchAreaRepository,                │
-│  AuditLogRepository                                         │
+│       *** DATA ACCESS LAYER ***                             │
+│         Repository Interfaces & Implementations             │
+│  • IProposalRepository / ProposalRepository                 │
+│    └─ CRUD on Proposal, SupervisorInterest, Match           │
+│    └─ Query by student, research area, status               │
+│    └─ Check interest/match existence                        │
+│                                                              │
+│  • IResearchAreaRepository / ResearchAreaRepository         │
+│    └─ Fetch active/inactive research areas                  │
+│    └─ Query area by ID or name                              │
+│    └─ Supervisor expertise lookup                           │
+│                                                              │
+│  • IAuditLogRepository / AuditLogRepository                 │
+│    └─ Insert audit log entries                              │
+│    └─ Query logs by filter (user, action, entity)           │
+│                                                              │
+│  Role:                                                       │
+│  - Abstract database access behind interface contracts      │
+│  - Encapsulate EF Core queries                              │
+│  - Enable unit testing via mock repositories                │
+│  - Provide single point of change for data access logic     │
+│  - Return entities (not view models)                        │
 └────────────────────┬────────────────────────────────────────┘
+                     │ Repository uses DbContext & LINQ
                      │
 ┌────────────────────▼────────────────────────────────────────┐
-│        Entity Framework Core + SQL Database                 │
-│        (ApplicationDbContext, Entities, Migrations)         │
+│       *** DATA PERSISTENCE LAYER ***                        │
+│      Entity Framework Core + SQL Database                   │
+│  • ApplicationDbContext                                     │
+│    └─ DbSet<Proposal>, DbSet<ApplicationUser>, etc.         │
+│    └─ Fluent model configuration                            │
+│    └─ Relationship mappings                                 │
+│                                                              │
+│  • Entity Classes (DomainEntities.cs)                       │
+│    └─ Proposal, Match, ApplicationUser, StudentProfile      │
+│    └─ SupervisorProfile, ResearchArea, AuditLog, etc.       │
+│                                                              │
+│  • Migrations (Migrations/ folder)                          │
+│    └─ Database schema versioning                            │
+│    └─ Deploy database structure changes                     │
+│    └─ Reversible with Down() methods                        │
+│                                                              │
+│  • SQL Server Database                                      │
+│    └─ Stores all application data                           │
+│    └─ Enforces unique constraints (proposal, email)         │
+│    └─ Defines foreign key relationships                     │
+│                                                              │
+│  • SQLite Database (Testing)                                │
+│    └─ In-memory or file-based for tests                     │
+│    └─ Matches SQL Server schema via migrations              │
+│    └─ Enables fast test execution without server            │
+│                                                              │
+│  Role:                                                       │
+│  - Map C# objects to SQL tables                             │
+│  - Generate SQL queries from LINQ expressions               │
+│  - Manage migrations and schema versions                    │
+│  - Persist and retrieve entity data                         │
 └─────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow Example: Student Creates a Proposal
+
+```
+1. User clicks "Create Proposal" button in browser
+   ↓
+2. Browser sends GET /student/proposals/create
+   ↓
+3. StudentController.CreateProposal() receives request
+   └─ Validates [Authorize(Roles = "Student")]
+   └─ Extracts userId = User.GetUserId()
+   ↓
+4. Controller calls proposalService.BuildProposalFormAsync(userId)
+   └─ Service queries db for research areas
+   └─ Service queries db for student's previous proposals
+   └─ Service builds ProposalFormViewModel with dropdown data
+   ↓
+5. Service calls repository.GetActiveResearchAreasAsync()
+   └─ Repository uses EF Core to query ApplicationDbContext
+   └─ EF Core translates LINQ to SQL:
+      SELECT * FROM ResearchAreas WHERE IsActive = 1
+   ↓
+6. Database returns active areas; repository returns to service
+   ↓
+7. Service builds view model and returns to controller
+   ↓
+8. Controller renders ProposalForm.cshtml with form data
+   ↓
+9. User sees form with research area dropdown and enters details
+   ↓
+10. User submits POST /student/proposals/create
+
+11. StudentController.CreateProposal(model) receives form data
+    └─ Validates [ValidateAntiForgeryToken] (CSRF protection)
+    └─ Validates ModelState (required fields, formats)
+    ↓
+12. Controller calls proposalService.CreateProposalAsync(userId, model)
+    └─ Service enforces business rule:
+       "Research area must be active"
+    └─ Service creates Proposal entity with status = Draft
+    └─ Service calls repository.CreateProposalAsync(proposal)
+    ↓
+13. Repository calls dbContext.Proposals.AddAsync(proposal)
+    └─ Adds entity to change tracking
+    └─ Marks as "Added"
+    └─ Calls dbContext.SaveChangesAsync()
+    └─ EF Core generates INSERT SQL:
+       INSERT INTO Proposals (StudentUserId, ResearchAreaId, ...)
+       VALUES (@studentId, @areaId, ...)
+    ↓
+14. Database inserts row and returns auto-generated ProposalId
+    ↓
+15. EF Core updates proposal.Id with database-generated value
+    ↓
+16. Service calls auditService.RecordAsync()
+    └─ Audit service logs: "Proposal Created" with proposal ID
+    └─ Audit repository inserts audit log to database
+    ↓
+17. Service returns ServiceResult<int>{Data = proposalId, Success = true}
+    ↓
+18. Controller checks result.Success
+    └─ If true: Redirects to /student/proposals (success message)
+    └─ If false: Redisplays form with error message
+    ↓
+19. Browser displays success message and refreshes proposals list
 ```
 
 ### Service Layer Overview
