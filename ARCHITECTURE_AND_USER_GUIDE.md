@@ -252,14 +252,402 @@ The application follows a classic **layered architecture pattern** with clear se
 
 ### Service Layer Overview
 
-| Service | Purpose | Key Methods |
-|---------|---------|-------------|
-| **ProposalService** | Student proposal lifecycle management | `CreateProposalAsync`, `UpdateProposalAsync`, `WithdrawProposalAsync` |
-| **MatchingService** | Supervisor browsing, interest, and match confirmation | `ExpressInterestAsync`, `ConfirmMatchAsync`, `GetAnonymousBrowserAsync` |
-| **AdminService** | Admin dashboards, user management, research areas, reassignment | `SaveResearchAreaAsync`, `CreateUserAsync`, `ReassignAsync` |
-| **AuditService** | Records business-critical actions for traceability | `RecordAsync` |
+The services layer implements all business logic, orchestrates workflows, and enforces critical rules. Services are registered as scoped dependencies in the DI container and are always injected into controllers.
+
+#### Service Architecture Pattern
+
+All services follow a consistent pattern:
+
+```csharp
+public interface IXxxService
+{
+    Task<ServiceResult<T>> OperationAsync(parameters);
+    Task<ServiceResult> ActionAsync(parameters);
+}
+
+public class XxxService : IXxxService
+{
+    private readonly IRepository _repository;
+    private readonly IAuditService _auditService;
+    
+    public XxxService(IRepository repository, IAuditService auditService)
+    {
+        _repository = repository;
+        _auditService = auditService;
+    }
+    
+    public async Task<ServiceResult<T>> OperationAsync(parameters)
+    {
+        // Validate inputs
+        // Enforce business rules
+        // Perform operations
+        // Record audit logs
+        // Return ServiceResult with success/error
+    }
+}
+```
+
+**ServiceResult Pattern:**
+```csharp
+public class ServiceResult
+{
+    public bool Success { get; set; }
+    public string? ErrorMessage { get; set; }
+}
+
+public class ServiceResult<T> : ServiceResult
+{
+    public T? Data { get; set; }
+}
+```
+
+This pattern allows controllers to handle success/failure uniformly without exceptions.
 
 ---
+
+#### 1. ProposalService
+
+**Purpose:** Manages the complete student proposal lifecycle from creation through withdrawal or matching.
+
+**Dependencies:**
+- `IProposalRepository` — Proposal data access
+- `IAuditService` — Audit logging
+- `IResearchAreaRepository` — Validate research areas
+
+**Key Methods:**
+
+| Method | Parameters | Returns | Business Logic |
+|--------|-----------|---------|-----------------|
+| `GetStudentDashboardAsync(studentUserId)` | Student ID | `StudentDashboardViewModel` | Fetches all proposals for student; counts by status; calculates matching stats |
+| `GetStudentProposalsAsync(studentUserId)` | Student ID | `List<ProposalListItemViewModel>` | Retrieves proposals filtered by student; orders by creation date |
+| `BuildProposalFormAsync(studentUserId, proposalId?)` | Student ID, optional proposal ID | `ProposalFormViewModel` | Loads research areas dropdown; populates existing proposal if editing |
+| `CreateProposalAsync(studentUserId, model)` | Student ID, form model | `ServiceResult<int>` | **Validates:** Research area is active; prevents null fields. **Creates:** Proposal with Draft status; records audit log. **Returns:** New proposal ID or error |
+| `UpdateProposalAsync(studentUserId, proposalId, model)` | Student ID, proposal ID, form model | `ServiceResult` | **Validates:** Student owns proposal; status is Draft/Submitted (not Matched/Withdrawn). **Prevents:** Editing locked proposals. **Updates:** Proposal properties; records audit log |
+| `WithdrawProposalAsync(studentUserId, proposalId)` | Student ID, proposal ID | `ServiceResult` | **Validates:** Student owns proposal; status NOT Matched. **Prevents:** Withdrawing matched proposals. **Updates:** Status to Withdrawn; timestamps; records audit |
+| `GetStudentProposalDetailsAsync(studentUserId, proposalId)` | Student ID, proposal ID | `ProposalDetailsViewModel?` | Fetches proposal with full details (keywords, supervisor interests count if matched) |
+
+**Critical Business Rules:**
+
+- ✓ Only active research areas can be selected for proposals
+- ✓ Proposals start in **Draft** status (editable by creator)
+- ✓ **Matched** proposals are locked (no edit, no withdrawal)
+- ✓ Only the owning student can modify their proposals
+- ✓ Withdrawal is allowed unless proposal is already matched
+- ✓ Submit action transitions proposal to `PendingReview` (awaiting admin activation)
+
+**Audit Events Recorded:**
+- "Proposal Created" — When proposal is first created
+- "Proposal Updated" — When fields are modified
+- "Proposal Withdrawn" — When student withdraws
+
+---
+
+#### 2. MatchingService
+
+**Purpose:** Manages supervisor proposal review, interest expression, and match confirmation. Implements the blind review workflow.
+
+**Dependencies:**
+- `IProposalRepository` — Proposal and interest data access
+- `IResearchAreaRepository` — Expertise validation
+- `IAuditService` — Audit logging
+
+**Key Methods:**
+
+| Method | Parameters | Returns | Business Logic |
+|--------|-----------|---------|-----------------|
+| `GetSupervisorDashboardAsync(supervisorUserId)` | Supervisor ID | `SupervisorDashboardViewModel` | Counts interested proposals; counts confirmed matches; loads quick stats |
+| `GetAnonymousBrowserAsync(researchAreaId?, searchTerm?)` | Optional area ID, optional search | `AnonymousProposalBrowserViewModel` | Filters UnderReview proposals by area/search; **excludes student identity**; shows only title, description, keywords, interest count |
+| `GetSupervisorProposalDetailsAsync(supervisorUserId, proposalId)` | Supervisor ID, proposal ID | `SupervisorProposalDetailsViewModel?` | If proposal UnderReview: **blind view** (no student name/email). If proposal Matched to this supervisor: **full view** including student profile. Otherwise: null |
+| `GetInterestedAsync(supervisorUserId)` | Supervisor ID | `List<SupervisorProposalCardViewModel>` | Fetches proposals where supervisor expressed interest but not yet confirmed match |
+| `GetConfirmedMatchesAsync(supervisorUserId)` | Supervisor ID | `List<SupervisorProposalCardViewModel>` | Fetches proposals where supervisor has confirmed match; includes student identity |
+| `BuildExpertiseViewModelAsync(supervisorUserId)` | Supervisor ID | `ExpertiseManagementViewModel` | Loads supervisor profile; loads all research areas as checkboxes; marks currently-selected expertise |
+| `UpdateExpertiseAsync(supervisorUserId, model)` | Supervisor ID, expertise model | `ServiceResult` | **Updates:** SupervisorExpertise records; **records audit log** |
+| `ExpressInterestAsync(supervisorUserId, proposalId)` | Supervisor ID, proposal ID | `ServiceResult` | **Validates:** Proposal is UnderReview; supervisor not already interested (prevents duplicate); creates SupervisorInterest record; records audit |
+| `ConfirmMatchAsync(supervisorUserId, proposalId)` | Supervisor ID, proposal ID | `ServiceResult` | **Validates:** Supervisor expressed interest in proposal; no existing confirmed match on proposal. **Creates:** Match record with Status=Confirmed; updates Proposal.Status to Matched; sets IdentityRevealedAt timestamp; **records audit** |
+
+**Critical Business Rules:**
+
+- ✓ Supervisors can only browse proposals in **UnderReview** status
+- ✓ Student identity is **never visible** in blind browser (title, description only)
+- ✓ Duplicate interest prevention — Supervisor cannot express interest in same proposal twice
+- ✓ One match per proposal — Only one confirmed match allowed per proposal
+- ✓ Interest precedes match — Supervisor must express interest before confirming match
+- ✓ Identity reveal on match — Student name/email shown only after match confirmed
+- ✓ Expertise optional but validated — Supervisors can operate without expertise, but reassignment validates expertise fit
+
+**Identity Protection Mechanisms:**
+
+1. **Anonymous Browser Query:**
+   ```csharp
+   // SELECT only: Title, Description, Keywords, ResearchArea, InterestCount
+   // EXCLUDE: StudentName, StudentEmail, StudentProfile, Registration#
+   var proposals = await _repo.GetProposalsForBrowsingAsync();
+   ```
+
+2. **View-Level Filtering:**
+   - Controllers check Match status before returning student profile
+   - Razor views conditionally render student details only if matched
+
+3. **Tests Verify:**
+   - Blind views don't contain student PII
+   - Post-match views include student details
+
+**Audit Events Recorded:**
+- "Interest Expressed" — When supervisor shows interest
+- "Match Confirmed" — When supervisor confirms match
+- "Expertise Updated" — When supervisor modifies expertise areas
+
+---
+
+#### 3. AdminService
+
+**Purpose:** Provides system oversight, user management, research area administration, and manual reassignment capabilities. Admins have full visibility (no blind views).
+
+**Dependencies:**
+- `IProposalRepository` — Proposal oversight
+- `IResearchAreaRepository` — Area management
+- `IAuditLogRepository` — Audit log access
+- `UserManager<ApplicationUser>` — Identity user management (ASP.NET Core Identity)
+- `IAuditService` — Audit logging
+
+**Key Methods:**
+
+| Method | Parameters | Returns | Business Logic |
+|--------|-----------|---------|-----------------|
+| `GetDashboardAsync()` | — | `AdminDashboardViewModel` | Computes system statistics: total proposals by status, total matches, total users by role, pending approvals |
+| `GetResearchAreasAsync()` | — | `ResearchAreaManagementViewModel` | Fetches all research areas (active and inactive) with counts of proposals in each |
+| `SaveResearchAreaAsync(model)` | Research area edit model | `ServiceResult` | **Creates or Updates:** ResearchArea; validates name uniqueness; records audit |
+| `ToggleResearchAreaAsync(areaId)` | Research area ID | `ServiceResult` | **Toggles:** IsActive flag; if deactivating, may prevent new proposals in that area; records audit |
+| `GetUsersAsync()` | — | `UserManagementViewModel` | Fetches all users with roles and active status |
+| `CreateUserAsync(model)` | User creation model | `ServiceResult` | **Validates:** Email unique; password meets policy. **Creates:** ApplicationUser via Identity; assigns role. **Initializes:** Profile (StudentProfile or SupervisorProfile based on role). **Records audit** |
+| `ToggleUserAsync(userId)` | User ID | `ServiceResult` | **Updates:** User.IsActive flag; records audit |
+| `GetProposalOversightAsync(searchTerm?, areaId?, status?)` | Optional search, area, status | `ProposalOversightViewModel` | **Queries all proposals** with filters; shows full student identity (unlike supervisor browse); includes proposal status, created date, supervisor (if matched) |
+| `GetMatchOversightAsync()` | — | `MatchOversightViewModel` | Fetches all confirmed matches; shows student, supervisor, match timestamp |
+| `BuildReassignmentViewModelAsync(proposalId)` | Proposal ID | `AdminReassignmentViewModel?` | Loads proposal; lists all active supervisors; pre-populates current supervisor if any; validates proposal is matchable |
+| `ReassignAsync(model, actingUserId)` | Reassignment model, admin user ID | `ServiceResult` | **Validates:** New supervisor is active; supervisor has expertise in proposal's area. **Creates:** New Match with Status=Reassigned (overrides old match). **Records audit** with details: reason, old supervisor, new supervisor, acting admin |
+| `GetAuditLogsAsync()` | — | `List<AuditLogViewModel>` | Fetches all audit log entries; typically paginated; can be filtered by date range, action, entity, user |
+
+**Critical Business Rules:**
+
+- ✓ Full visibility — Admins see student identity in all views (no blind browsing)
+- ✓ User creation enforces password policy — 8+ chars, uppercase, lowercase, digit, non-alphanumeric
+- ✓ Email uniqueness — Enforced by Identity and database
+- ✓ Research area activation/deactivation — Controls what fields are available for proposals
+- ✓ Reassignment expertise validation — New supervisor must have expertise in proposal's research area
+- ✓ Reassignment creates audit trail — Reason, old/new supervisors, timestamp, acting admin logged
+
+**Admin Reassignment Workflow:**
+
+1. Admin selects proposal
+2. Admin chooses new supervisor from active supervisor list
+3. System validates:
+   - New supervisor is active
+   - New supervisor has expertise in proposal's research area
+   - Proposal is not in terminal state (withdrawn)
+4. System creates new **Match** with `Status = Reassigned`
+5. Old Match record archived/marked as superseded
+6. Proposal status updated (if needed)
+7. Audit log entry created with full context
+
+**Audit Events Recorded:**
+- "User Created" — When admin creates new account
+- "User Deactivated/Activated" — When toggling user status
+- "Research Area Saved" — When area created/modified
+- "Research Area Toggled" — When area activated/deactivated
+- "Proposal Reassigned" — When admin manually reassigns supervisor
+
+---
+
+#### 4. AuditService
+
+**Purpose:** Records all business-critical actions for compliance, traceability, and forensic analysis.
+
+**Dependencies:**
+- `IAuditLogRepository` — Audit log data access
+
+**Key Methods:**
+
+| Method | Parameters | Returns | Business Logic |
+|--------|-----------|---------|-----------------|
+| `RecordAsync(action, entityName, entityId, userId, details)` | Action string, entity name, entity ID, user ID (nullable), details string | `Task` (fire-and-forget, no return) | **Inserts:** AuditLog record with action, entity reference, user, timestamp, and context details |
+
+**Usage Pattern:**
+
+```csharp
+// In a service:
+await _auditService.RecordAsync(
+    action: "Proposal Created",
+    entityName: "Proposal",
+    entityId: proposal.Id.ToString(),
+    userId: studentUserId,
+    details: $"Title: {proposal.Title}, ResearchArea: {proposal.ResearchArea.Name}"
+);
+
+// In admin service:
+await _auditService.RecordAsync(
+    action: "Proposal Reassigned",
+    entityName: "Match",
+    entityId: match.Id.ToString(),
+    userId: adminUserId,
+    details: $"From: {oldSupervisor.DisplayName} → To: {newSupervisor.DisplayName}, Reason: {reason}"
+);
+```
+
+**Logged Actions:**
+
+| Action | Entity | When | Details Include |
+|--------|--------|------|-----------------|
+| Proposal Created | Proposal | Student submits | Title, Research Area |
+| Proposal Updated | Proposal | Student edits | Changed fields |
+| Proposal Withdrawn | Proposal | Student/Admin withdraws | Reason if admin |
+| Interest Expressed | SupervisorInterest | Supervisor clicks "Interest" | Supervisor, Proposal |
+| Match Confirmed | Match | Supervisor confirms | Supervisor, Proposal |
+| Proposal Reassigned | Match | Admin reassigns | Old/New Supervisor, Reason |
+| User Created | ApplicationUser | Admin creates account | Email, Role, Initial Status |
+| User Status Changed | ApplicationUser | Admin activates/deactivates | New status, reason |
+| Research Area Saved | ResearchArea | Admin creates/updates area | Area name, description |
+| Research Area Toggled | ResearchArea | Admin activates/deactivates | New IsActive status |
+
+**Non-Technical Impact:**
+
+- ✓ **Compliance** — Audit trail proves system decisions are traceable
+- ✓ **Forensics** — Admins can investigate anomalies or disputes
+- ✓ **Accountability** — Every important action is attributed to a user and timestamp
+- ✓ **Transparency** — Students/supervisors can see action history on their proposals
+
+---
+
+#### Service Dependency Graph
+
+```
+StudentController
+    ↓
+ProposalService ←─ IProposalRepository
+    ├─ IResearchAreaRepository
+    └─ IAuditService ←─ IAuditLogRepository
+
+SupervisorController
+    ↓
+MatchingService ←─ IProposalRepository
+    ├─ IResearchAreaRepository
+    └─ IAuditService ←─ IAuditLogRepository
+
+AdminController
+    ↓
+AdminService ←─ IProposalRepository
+    ├─ IResearchAreaRepository
+    ├─ IAuditLogRepository
+    ├─ UserManager<ApplicationUser> (Identity)
+    └─ IAuditService ←─ IAuditLogRepository
+```
+
+---
+
+#### Error Handling and Validation
+
+All services validate inputs and return structured `ServiceResult`:
+
+```csharp
+// Example from ProposalService.UpdateProposalAsync:
+public async Task<ServiceResult> UpdateProposalAsync(string studentUserId, int proposalId, ProposalFormViewModel model)
+{
+    // Fetch proposal
+    var proposal = await _proposalRepository.GetByIdAsync(proposalId);
+    if (proposal == null)
+        return new ServiceResult { Success = false, ErrorMessage = "Proposal not found" };
+    
+    // Ownership check
+    if (proposal.StudentUserId != studentUserId)
+        return new ServiceResult { Success = false, ErrorMessage = "Unauthorized" };
+    
+    // Business rule: Cannot edit matched proposals
+    if (proposal.Status == ProposalStatus.Matched)
+        return new ServiceResult { Success = false, ErrorMessage = "Cannot edit matched proposals" };
+    
+    // Validation: Research area is active
+    var area = await _researchAreaRepository.GetByIdAsync(model.ResearchAreaId);
+    if (area == null || !area.IsActive)
+        return new ServiceResult { Success = false, ErrorMessage = "Selected research area is invalid or inactive" };
+    
+    // Update entity
+    proposal.Title = model.Title;
+    proposal.Description = model.Description;
+    // ... more fields
+    
+    // Persist
+    await _proposalRepository.UpdateAsync(proposal);
+    
+    // Audit
+    await _auditService.RecordAsync("Proposal Updated", "Proposal", proposal.Id.ToString(), studentUserId, "...");
+    
+    return new ServiceResult { Success = true };
+}
+```
+
+**Controllers handle results consistently:**
+
+```csharp
+var result = await _proposalService.UpdateProposalAsync(userId, id, model);
+if (!result.Success)
+{
+    ModelState.AddModelError("", result.ErrorMessage);
+    return View(model);
+}
+
+return RedirectToAction("Proposals", new { message = "Proposal updated successfully" });
+```
+
+---
+
+#### Async/Await Usage
+
+All repository and EF Core queries are **fully async**:
+
+```csharp
+public async Task<ServiceResult> ExpressInterestAsync(string supervisorUserId, int proposalId)
+{
+    // All database calls are async
+    var proposal = await _proposalRepository.GetByIdAsync(proposalId);
+    var existingInterest = await _proposalRepository.GetInterestAsync(proposalId, supervisorUserId);
+    
+    // ... validation ...
+    
+    var interest = new SupervisorInterest { ProposalId = proposalId, SupervisorUserId = supervisorUserId, ExpressedAt = DateTime.UtcNow };
+    await _proposalRepository.AddInterestAsync(interest);
+    await _auditService.RecordAsync(...);
+    
+    return new ServiceResult { Success = true };
+}
+```
+
+**Benefits:**
+- Does not block thread pool
+- Scales well under load
+- ASP.NET Core can serve more concurrent requests
+
+---
+
+#### Service Registration (Program.cs)
+
+```csharp
+builder.Services.AddScoped<IProposalRepository, ProposalRepository>();
+builder.Services.AddScoped<IResearchAreaRepository, ResearchAreaRepository>();
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+
+builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<IProposalService, ProposalService>();
+builder.Services.AddScoped<IMatchingService, MatchingService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+```
+
+**Scoped Lifetime:**
+- Each HTTP request gets a new instance
+- Instances are disposed after request completes
+- Database context lives for request lifetime
+
+---
+
+
 
 ## User Roles and Workflows
 
