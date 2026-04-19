@@ -4834,24 +4834,25 @@
     ]
   },
   "packageFolders": {
-    "/Users/ravindufernando/.nuget/packages/": {}
+    "/Users/kenver/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
+      "projectUniqueName": "/Users/kenver/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
       "projectName": "BlindMatchPAS.Web",
-      "projectPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
-      "packagesPath": "/Users/ravindufernando/.nuget/packages/",
-      "outputPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/obj/",
+      "projectPath": "/Users/kenver/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
+      "packagesPath": "/Users/kenver/.nuget/packages/",
+      "outputPath": "/Users/kenver/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/ravindufernando/.nuget/NuGet/NuGet.Config"
+        "/Users/kenver/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "/usr/local/share/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4870,7 +4871,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -4916,6 +4917,20 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.osx-arm64",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.22, 8.0.22]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -4924,16 +4939,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
-    }
-  ]
+  }
 }
