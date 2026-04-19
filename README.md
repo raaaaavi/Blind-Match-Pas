@@ -156,3 +156,4 @@ dotnet test BlindMatchPAS.IntegrationTests/BlindMatchPAS.IntegrationTests.csproj
 - `docs/SAMPLE_REPORT_SUPPORT_NOTES.md`
 - `docs/SUGGESTED_SCREENSHOTS.md`
 - `docs/SUGGESTED_COMMIT_PLAN.md`
+Environment setup completed using Visual Studio 2022 and SQL Server LocalDB.
