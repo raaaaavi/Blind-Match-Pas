@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlindMatchPAS.Web.Controllers;
-
+/// <summary>
+/// matching logic
+/// </summary>
+/// <param name="adminService"></param>
 [Authorize(Roles = RoleNames.AdminRoles)]
 [Route("admin")]
 public class AdminController(IAdminService adminService) : Controller
