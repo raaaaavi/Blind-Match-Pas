@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "e5wIhysFQ1g=",
+  "dgSpecHash": "If/2xqmf+HM=",
   "success": true,
-  "projectFilePath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.IntegrationTests/BlindMatchPAS.IntegrationTests.csproj",
+  "projectFilePath": "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.IntegrationTests/BlindMatchPAS.IntegrationTests.csproj",
   "expectedPackageFiles": [
     "/Users/ravindufernando/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
     "/Users/ravindufernando/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",
@@ -182,15 +182,5 @@
     "/Users/ravindufernando/.nuget/packages/xunit.extensibility.execution/2.5.3/xunit.extensibility.execution.2.5.3.nupkg.sha512",
     "/Users/ravindufernando/.nuget/packages/xunit.runner.visualstudio/2.5.3/xunit.runner.visualstudio.2.5.3.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json.",
-      "projectPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.IntegrationTests/BlindMatchPAS.IntegrationTests.csproj",
-      "warningLevel": 1,
-      "filePath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.IntegrationTests/BlindMatchPAS.IntegrationTests.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }

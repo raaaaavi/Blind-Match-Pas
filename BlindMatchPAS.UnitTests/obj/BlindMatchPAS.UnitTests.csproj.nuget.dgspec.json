@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj": {}
+    "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj": {}
   },
   "projects": {
-    "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj": {
+    "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj",
+        "projectUniqueName": "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj",
         "projectName": "BlindMatchPAS.UnitTests",
-        "projectPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj",
+        "projectPath": "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.UnitTests/BlindMatchPAS.UnitTests.csproj",
         "packagesPath": "/Users/ravindufernando/.nuget/packages/",
-        "outputPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.UnitTests/obj/",
+        "outputPath": "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.UnitTests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/ravindufernando/.nuget/NuGet/NuGet.Config"
@@ -26,8 +26,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj": {
-                "projectPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj"
+              "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj": {
+                "projectPath": "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj"
               }
             }
           }
@@ -93,14 +93,14 @@
         }
       }
     },
-    "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj": {
+    "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
+        "projectUniqueName": "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
         "projectName": "BlindMatchPAS.Web",
-        "projectPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
+        "projectPath": "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.Web/BlindMatchPAS.Web.csproj",
         "packagesPath": "/Users/ravindufernando/.nuget/packages/",
-        "outputPath": "/Users/ravindufernando/Desktop/Blind-Match-Pas/BlindMatchPAS.Web/obj/",
+        "outputPath": "/Users/ravindufernando/Blind-Match-Pas/Blind-Match-Pas/BlindMatchPAS.Web/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/ravindufernando/.nuget/NuGet/NuGet.Config"

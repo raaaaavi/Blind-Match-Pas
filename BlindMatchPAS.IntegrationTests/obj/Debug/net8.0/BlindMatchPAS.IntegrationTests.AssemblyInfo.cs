@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BlindMatchPAS.IntegrationTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e6e1292748e5091b3854f1d3d36989b80407b9f2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cbd9e40cbc4f0c8f6313d29a89a14ff8a7c2d546")]
 [assembly: System.Reflection.AssemblyProductAttribute("BlindMatchPAS.IntegrationTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BlindMatchPAS.IntegrationTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
