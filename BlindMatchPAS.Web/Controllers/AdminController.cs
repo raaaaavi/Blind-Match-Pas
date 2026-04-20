@@ -3,6 +3,9 @@ using BlindMatchPAS.Web.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+// Handles all admin-related operations such as user management,
+// research areas, proposal oversight, and system monitoring
+// TODO: Add logging for admin actions
 namespace BlindMatchPAS.Web.Controllers;
 
 [Authorize(Roles = RoleNames.AdminRoles)]
@@ -10,7 +13,11 @@ namespace BlindMatchPAS.Web.Controllers;
 public class AdminController(IAdminService adminService) : Controller
 {
     [HttpGet("dashboard")]
-    public async Task<IActionResult> Dashboard() => View(await adminService.GetDashboardAsync());
+    public async Task<IActionResult> Dashboard()
+{
+    var dashboardData = await adminService.GetDashboardAsync();
+    return View(dashboardData);
+}
 
     [HttpGet("users")]
     public async Task<IActionResult> Users() => View(await adminService.GetUsersAsync());
